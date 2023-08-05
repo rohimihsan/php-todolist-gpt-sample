@@ -1,4 +1,8 @@
-stage('Stop and Remove Existing Container') {
+pipeline {
+    agent any
+
+    stages {
+        stage('Stop and Remove Existing Container') {
             steps {
                 script {
                     // Define the name of the existing container
@@ -24,3 +28,5 @@ stage('Stop and Remove Existing Container') {
                 sh "docker run -d -p 8080:80 --name todo-app todo-app"
             }
         }
+    }
+}
