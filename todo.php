@@ -46,7 +46,7 @@
             }
         }
 
-        document.getElementById('inputField').addEventListener('keydown', function(event) {
+        document.getElementById('taskInput').addEventListener('keydown', function(event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
                 var taskInput = document.getElementById("taskInput");
