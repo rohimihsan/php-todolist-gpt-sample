@@ -1,8 +1,5 @@
-# Use the official PHP image as the base image
-FROM php:latest
-
-# Install required PHP extensions
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+# Use the official PHP-FPM image as the base image
+FROM php:fpm
 
 # Install NGINX
 RUN apt-get update && apt-get install -y nginx
@@ -15,16 +12,13 @@ COPY default.conf /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/
 
 # Copy PHP application files to the container
-COPY . /var/www/html
+COPY app_files/ /var/www/html
 
 # Expose the ports
 EXPOSE 80
 
-# Install supervisord
-RUN apt-get install -y supervisor
+# Start PHP-FPM (runs in the foreground)
+CMD ["php-fpm"]
 
-# Copy supervisord configuration for nginx and php-fpm
-COPY supervisor.conf /etc/supervisor/conf.d/
-
-# Start supervisord to manage NGINX and PHP-FPM
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+# Start NGINX in the background
+CMD ["nginx", "-g", "daemon off;"]
