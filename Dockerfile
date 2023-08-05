@@ -20,7 +20,7 @@ COPY . /var/www
 # Set appropriate permissions for the web server to access the files
 RUN chown -R www-data:www-data /var/www
 
-# Expose port 9000 for PHP-FPM
+# Expose port 8010 for PHP-FPM
 EXPOSE 8010
 
 # Start PHP-FPM
