@@ -1,46 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple To-Do List</title>
+    <title>To-Do List App</title>
+    <style>
+        /* Add some basic CSS styling for the To-Do list */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #todoList {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>To-Do List</h1>
-    <form method="post" action="index.php">
-        <input type="text" name="task" placeholder="Enter task">
-        <button type="submit" name="add">Add</button>
+    <form>
+        <input type="text" id="taskInput" placeholder="Add new task">
+        <button type="button" onclick="addTask()">Add</button>
     </form>
-
-    <?php
-    session_start();
-    if (isset($_POST['add'])) {
-        $task = $_POST['task'];
-        if (!empty($task)) {
-            $_SESSION['tasks'][] = $task;
+    <ul id="todoList">
+        <!-- PHP code to populate the To-Do list with JavaScript -->
+        <?php
+        $tasks = array("Task 1", "Task 2", "Task 3"); // Sample tasks
+        foreach ($tasks as $task) {
+            echo "<li>$task</li>";
         }
-    }
+        ?>
+    </ul>
 
-    if (isset($_POST['remove'])) {
-        $index = $_POST['index'];
-        if (isset($_SESSION['tasks'][$index])) {
-            unset($_SESSION['tasks'][$index]);
+    <script>
+        // JavaScript code to handle the To-Do list functionality
+        function addTask() {
+            var taskInput = document.getElementById("taskInput");
+            var task = taskInput.value;
+            if (task.trim() !== "") {
+                var todoList = document.getElementById("todoList");
+                var listItem = document.createElement("li");
+                listItem.textContent = task;
+                todoList.appendChild(listItem);
+                taskInput.value = "";
+            }
         }
-    }
-
-    if (isset($_SESSION['tasks']) && count($_SESSION['tasks']) > 0) {
-        echo "<h2>Tasks:</h2>";
-        echo "<ul>";
-        foreach ($_SESSION['tasks'] as $index => $task) {
-            echo "<li>$task";
-            echo "<form method='post' action='index.php'>";
-            echo "<input type='hidden' name='index' value='$index'>";
-            echo "<button type='submit' name='remove'>Remove</button>";
-            echo "</form>";
-            echo "</li>";
-        }
-        echo "</ul>";
-    } else {
-        echo "<p>No tasks yet.</p>";
-    }
-    ?>
+    </script>
 </body>
 </html>
