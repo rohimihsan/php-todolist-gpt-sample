@@ -20,6 +20,5 @@ COPY . /var/www/html
 # Expose the ports
 EXPOSE 80
 
-# Start both NGINX and PHP-FPM services
-CMD ["php-fpm"]
+CMD service nginx start && php -S 0.0.0.0:80 -t /var/www/html
 
