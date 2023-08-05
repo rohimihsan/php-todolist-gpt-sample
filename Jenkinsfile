@@ -9,7 +9,8 @@ pipeline {
         }
         stage('Run') {
             steps {
-                sh 'sudo docker run -d -p 8010:80 todo-app' 
+                sh 'docker stop todo-app'
+                sh 'sudo docker run -d --name todo-app -p 8010:80 todo-app' 
             }
         }
     }
