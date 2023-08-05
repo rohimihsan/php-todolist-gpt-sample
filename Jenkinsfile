@@ -1,27 +1,35 @@
 pipeline {
     agent any
-  
+
     stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the PHP application code from the repository
+                checkout scm
+            }
+        }
+
+        // stage('Build') {
+        //     steps {
+        //         // Install PHP dependencies using Composer
+        //         // sh 'composer install'
+
+        //         // Build your PHP application (if needed)
+        //         // For example, compile assets, etc.
+        //         // sh 'php build_script.php'
+        //     }
+        // }
+
         stage('Deploy') {
             steps {
-                echo "run"
-                sh "export JENKINS_NODE_COOKIE=dontKillMe; nohup php -S localhost:8000 > todophp.log 2>&1 &"
+                // Copy the PHP files to the Nginx web root
+                sh 'sudo cp -r . /var/www/html/' // Adjust the path as needed
+
+                // Restart Nginx to apply changes
+                sh 'sudo service nginx restart'
             }
         }
     }
 
-    post {
-        always {
-            // Wait for a few seconds to ensure the Go binary is started properly
-            sleep time: 10, unit: 'SECONDS'
-
-            // Optionally, you can include further steps here to validate the Go binary's behavior or perform other tasks.
-        }
-        success {
-            echo 'Build and deployment successful!'
-        }
-        failure {
-            echo 'Build or deployment failed!'
-        }
-    }
+    // Post-build actions, etc.
 }
