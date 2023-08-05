@@ -35,6 +35,7 @@
     <script>
         // JavaScript code to handle the To-Do list functionality
         function addTask() {
+            event.preventDefault();
             var taskInput = document.getElementById("taskInput");
             var task = taskInput.value;
             if (task.trim() !== "") {
