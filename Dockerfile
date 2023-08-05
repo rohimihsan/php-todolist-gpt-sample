@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y nginx
 RUN rm /etc/nginx/sites-enabled/default
 
 # Copy the custom NGINX configuration file to the container
-COPY nginx/default.conf /etc/nginx/sites-available/
+COPY default.conf /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/
 
 # Copy PHP application files to the container
