@@ -23,7 +23,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh "sudo docker build -t todo-app ."
-                    sh "sudo docker run -d -p 8080:80 --name todo-app todo-app"
+                    sh "sudo docker run -d -p 8010:80 --name todo-app todo-app"
                 }
                 
             }
