@@ -5,10 +5,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Copy the PHP files to the Nginx web root
-                sh 'cp -r . /var/www/html/' // Adjust the path as needed
+                sh 'sudo cp -r . /var/www/html/' // Adjust the path as needed
 
                 // Restart Nginx to apply changes
-                sh 'service nginx restart'
+                sh 'sudo service nginx restart'
             }
         }
     }
