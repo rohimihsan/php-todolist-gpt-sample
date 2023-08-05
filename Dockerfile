@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y nginx
 RUN rm /etc/nginx/sites-enabled/default
 
 # Copy the custom NGINX configuration file to the container
-COPY default.conf /etc/nginx/sites-available/
+COPY nginx/default.conf /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/
 
 # Copy PHP application files to the container
@@ -20,5 +20,11 @@ COPY . /var/www/html
 # Expose the ports
 EXPOSE 80
 
-CMD service nginx start && php -S 0.0.0.0:9000 -t /var/www/html
+# Install supervisord
+RUN apt-get install -y supervisor
 
+# Copy supervisord configuration for nginx and php-fpm
+COPY supervisor.conf /etc/supervisor/conf.d/
+
+# Start supervisord to manage NGINX and PHP-FPM
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
