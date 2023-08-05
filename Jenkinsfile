@@ -2,16 +2,15 @@ pipeline {
     agent any
 
     stages {
-        stage('Deploy') {
+        stage('Build') {
             steps {
-                // Copy the PHP files to the Nginx web root
-                sh 'sudo cp -r . /var/www/html/' // Adjust the path as needed
-
-                // Restart Nginx to apply changes
-                sh 'sudo systemctl restart nginx'
+                sh 'docker build -t todo-app .'
+            }
+        }
+        stage('Run') {
+            steps {
+                sh 'docker run -d -p 8010:8010 my-php-app' 
             }
         }
     }
-
-    // Post-build actions, etc.
 }
