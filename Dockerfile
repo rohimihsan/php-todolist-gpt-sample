@@ -1,46 +1,25 @@
-FROM php:7.4-fpm-alpine
+# Use the official PHP image as the base image
+FROM php:latest
 
-# Set working directory
-WORKDIR /app
+# Install required PHP extensions
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-RUN apk update && apk add --no-cache \
-build-base shadow vim curl \
-php7 \
-php7-fpm \
-php7-common \
-php7-pdo \
-php7-pdo_mysql \
-docker-php-ext-install \
-php7-mysqli \
-php7-mcrypt \
-php7-mbstring \
-php7-xml \
-php7-openssl \
-php7-json \
-php7-phar \
-php7-zip \
-php7-gd \
-php7-dom \
-php7-session \
-php7-zlib
+# Install NGINX
+RUN apt-get update && apt-get install -y nginx
 
-# Copy your PHP application files to the container
-COPY . /app
+# Remove default NGINX configuration
+RUN rm /etc/nginx/sites-enabled/default
 
-# Stage 2: Final Production Image
-FROM nginx:latest
+# Copy the custom NGINX configuration file to the container
+COPY default.conf /etc/nginx/sites-available/
+RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/
 
-# Copy PHP application from the builder stage to Nginx's web root
-COPY --from=builder /app /usr/share/nginx/html
+# Copy PHP application files to the container
+COPY . /var/www/html
 
-# Remove default Nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Copy custom Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d
-
-# Expose port 80 (the default Nginx port)
+# Expose the ports
 EXPOSE 80
 
-# Start Nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+# Start both NGINX and PHP-FPM services
+CMD service nginx start && php-fpm
+
