@@ -8,7 +8,7 @@ pipeline {
                 sh 'sudo cp -r . /var/www/html/' // Adjust the path as needed
 
                 // Restart Nginx to apply changes
-                sh 'sudo service nginx restart'
+                sh 'sudo systemctl restart nginx'
             }
         }
     }
