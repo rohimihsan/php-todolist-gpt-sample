@@ -1,5 +1,4 @@
-# Stage 1: Build PHP Application
-FROM php:7.4-fpm AS builder
+FROM php:7.4-fpm-alpine
 
 # Set working directory
 WORKDIR /app
