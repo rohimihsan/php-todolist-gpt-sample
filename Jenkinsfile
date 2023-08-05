@@ -9,12 +9,12 @@ pipeline {
                     def containerName = 'todo-app'
                     
                     // Check if the container is running
-                    def isRunning = sh(returnStatus: true, script: "docker inspect -f '{{.State.Running}}' ${containerName}").trim() == 'true'
+                    def isRunning = sh(returnStatus: true, script: "sudo docker inspect -f '{{.State.Running}}' ${containerName}").trim() == 'true'
                     
                     // If the container is running, stop and remove it
                     if (isRunning) {
-                        sh "docker stop ${containerName}"
-                        sh "docker rm ${containerName}"
+                        sh "sudo docker stop ${containerName}"
+                        sh "sudo docker rm ${containerName}"
                     }
                 }
             }
@@ -24,8 +24,8 @@ pipeline {
             steps {
                 // Your build and run steps here to build and run the new Docker container
                 // For example:
-                sh "docker build -t todo-app ."
-                sh "docker run -d -p 8080:80 --name todo-app todo-app"
+                sh "sudo docker build -t todo-app ."
+                sh "sudo docker run -d -p 8080:80 --name todo-app todo-app"
             }
         }
     }
