@@ -1,27 +1,29 @@
-# Use the official PHP-FPM base image
-FROM php:7.4-fpm
+# Stage 1: Build PHP Application
+FROM php:7.4-fpm AS builder
 
-# Set working directory to /var/www
-WORKDIR /var/www
+# Set working directory
+WORKDIR /app
 
-# Install system dependencies and PHP extensions
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    unzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql zip
+# Install PHP extensions (add more if needed)
+RUN docker-php-ext-install pdo pdo_mysql
 
 # Copy your PHP application files to the container
-COPY . /var/www
+COPY . /app
 
-# Set appropriate permissions for the web server to access the files
-RUN chown -R www-data:www-data /var/www
+# Stage 2: Final Production Image
+FROM nginx:latest
 
-# Expose port 8010 for PHP-FPM
-EXPOSE 8010
+# Copy PHP application from the builder stage to Nginx's web root
+COPY --from=builder /app /usr/share/nginx/html
 
-# Start PHP-FPM
-CMD ["php-fpm"]
+# Remove default Nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d
+
+# Expose port 80 (the default Nginx port)
+EXPOSE 80
+
+# Start Nginx in the foreground
+CMD ["nginx", "-g", "daemon off;"]
