@@ -21,5 +21,5 @@ COPY . /var/www/html
 EXPOSE 80
 
 # Start both NGINX and PHP-FPM services
-CMD ['php-fpm']
+CMD ["php-fpm"]
 
