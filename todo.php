@@ -35,7 +35,6 @@
     <script>
         // JavaScript code to handle the To-Do list functionality
         function addTask() {
-            event.preventDefault();
             var taskInput = document.getElementById("taskInput");
             var task = taskInput.value;
             if (task.trim() !== "") {
@@ -46,6 +45,21 @@
                 taskInput.value = "";
             }
         }
+
+        document.getElementById('inputField').addEventListener('keydown', function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                var taskInput = document.getElementById("taskInput");
+                var task = taskInput.value;
+                if (task.trim() !== "") {
+                    var todoList = document.getElementById("todoList");
+                    var listItem = document.createElement("li");
+                    listItem.textContent = task;
+                    todoList.appendChild(listItem);
+                    taskInput.value = "";
+                }
+            }
+        });
     </script>
 </body>
 </html>
