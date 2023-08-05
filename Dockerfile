@@ -12,7 +12,7 @@ COPY default.conf /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/
 
 # Copy PHP application files to the container
-COPY app_files/ /var/www/html
+COPY . /var/www/html
 
 # Expose the ports
 EXPOSE 80
